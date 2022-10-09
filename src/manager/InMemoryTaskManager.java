@@ -19,6 +19,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private final Map<Integer, Epic> epics = new HashMap<>();
 
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
     @Override
     public ArrayList<Task> getTasks() {
         ArrayList<Task> taskList = new ArrayList<>();
@@ -72,6 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public SubTask getSubTask(int taskId) {
         if (subTasks.containsKey(taskId)) {
+            historyManager.addTask(tasks.get(taskId));
             return subTasks.get(taskId);
         }
         System.out.println("Ошибка: получение подзадачи по Id " + taskId);
@@ -81,6 +83,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTask(int taskId) {
         if (tasks.containsKey(taskId)) {
+            historyManager.addTask(tasks.get(taskId));
             return tasks.get(taskId);
         }
         System.out.println("Ошибка: получение задачи по Id " + taskId);
@@ -90,6 +93,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpic(int taskId) {
         if (epics.containsKey(taskId)) {
+            historyManager.addTask(epics.get(taskId));
             return epics.get(taskId);
         }
         System.out.println("Ошибка: получение эпика по Id " + taskId);
@@ -195,6 +199,11 @@ public class InMemoryTaskManager implements TaskManager {
             subTasksList.add(subTasks.get(subTaskId));
         }
         return subTasksList;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     public void updateEpicTaskState(Integer epicId) {

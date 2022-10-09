@@ -1,9 +1,12 @@
 import manager.InMemoryTaskManager;
+import manager.Managers;
 import manager.TaskManager;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 import tasks.TaskState;
+
+import java.util.List;
 
 public class Main {
 
@@ -14,7 +17,7 @@ public class Main {
         }
     }
     public static void main(String[] args) {
-        TaskManager taskManager = new InMemoryTaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
         int taskId1 = taskManager.addTask( new Task("Спорт", "Отжиматься 10 раз", TaskState.NEW) );
         int taskId2 = taskManager.addTask( new Task("Прогулка", "Погулять по парку", TaskState.DONE) );
@@ -27,15 +30,18 @@ public class Main {
         task.setState(TaskState.IN_PROGRESS);
         myAssert(taskManager.getTasks().get(0).getState() == TaskState.IN_PROGRESS);
         System.out.println(taskManager.getTasks());
+        System.out.println("История изменений: " + taskManager.getHistory());
 
         int epicId = taskManager.addEpicTask( new Epic("Покупки", "Сходить в магазин за едой") );
         myAssert(taskManager.getEpic(epicId).getState() == TaskState.NEW);
+        System.out.println("История изменений: " + taskManager.getHistory());
 
         int subTaskId1 = taskManager.addSubTask(new SubTask("Список покупок", "Составить список покупок", TaskState.DONE, epicId));
         myAssert(taskManager.getEpic(epicId).getState()== TaskState.DONE);
 
         int subTaskId2 = taskManager.addSubTask(new SubTask("Купить продукты", "Дойти до магазина и купить продукты", TaskState.NEW, epicId));
         myAssert(taskManager.getEpic(epicId).getState() == TaskState.IN_PROGRESS);
+        System.out.println("История изменений: " + taskManager.getHistory());
 
         myAssert(subTaskId1 != subTaskId2);
         myAssert(epicId != subTaskId1);
@@ -65,6 +71,10 @@ public class Main {
         taskManager.removeAllEpicTasks();
         myAssert(taskManager.getSubTasks().size() == 0);
 
-        System.out.println("Поехали!");
+
+        List<Task> tasksInHistory = taskManager.getHistory();
+        System.out.println("История тасков:");
+        System.out.println(tasksInHistory);
+        myAssert(tasksInHistory.size() <= 10);
     }
 }
