@@ -1,4 +1,15 @@
-import java.util.*;
+package manager;
+
+import tasks.TaskState;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -202,7 +213,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         if (subTasksInEpic.isEmpty()) {
-            epic.state = TaskState.NEW;
+            epic.setState(TaskState.NEW);
             return;
         }
 

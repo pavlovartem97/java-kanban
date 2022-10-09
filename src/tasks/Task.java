@@ -1,13 +1,7 @@
+package tasks;
+
 import java.util.Objects;
 
-/**
- * Состояние задачи
- */
-enum TaskState {
-    NEW,
-    IN_PROGRESS,
-    DONE
-}
 public class Task {
 
     // Уникальный Id

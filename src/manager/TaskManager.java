@@ -1,4 +1,10 @@
+package manager;
+
 import java.util.ArrayList;
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+import tasks.TaskState;
 
 public interface TaskManager {
     ArrayList<Task> getTasks();

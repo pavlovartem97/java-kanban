@@ -1,8 +1,6 @@
-import java.lang.reflect.Array;
+package tasks;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Epic extends Task {
     private ArrayList<Integer> subTaskIds = new ArrayList<>();

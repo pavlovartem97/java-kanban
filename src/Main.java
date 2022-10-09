@@ -1,3 +1,10 @@
+import manager.InMemoryTaskManager;
+import manager.TaskManager;
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+import tasks.TaskState;
+
 public class Main {
 
     // Почему-то обычный assert не срабатывает, поэтому написан для тестов в таком виде
