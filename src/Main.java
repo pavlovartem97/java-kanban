@@ -7,7 +7,7 @@ public class Main {
         }
     }
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = new InMemoryTaskManager();
 
         int taskId1 = taskManager.addTask( new Task("Спорт", "Отжиматься 10 раз", TaskState.NEW) );
         int taskId2 = taskManager.addTask( new Task("Прогулка", "Погулять по парку", TaskState.DONE) );
