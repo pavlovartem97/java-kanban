@@ -7,7 +7,6 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    // Наиболее эффективный контейнер для вставки в конце и удаления из начала
     private final LinkedList<Task> tasks = new LinkedList<>();
 
     @Override
