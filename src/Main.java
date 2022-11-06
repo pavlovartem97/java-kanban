@@ -19,40 +19,27 @@ public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
 
-        int taskId1 = taskManager.addTask( new Task("Спорт", "Отжиматься 10 раз", TaskState.NEW) );
-        int taskId2 = taskManager.addTask( new Task("Прогулка", "Погулять по парку", TaskState.DONE) );
-        System.out.println(taskManager.getTasks());
-        taskManager.removeTask(taskId2);
-        myAssert(taskManager.getTasks().size() == 1);
-
-        Task task = taskManager.getTask(taskId1);
-        task.setTaskName("Выгулять собаку");
-        task.setState(TaskState.IN_PROGRESS);
-        myAssert(taskManager.getTasks().get(0).getState() == TaskState.IN_PROGRESS);
-        System.out.println(taskManager.getTasks());
-        System.out.println("История изменений: " + taskManager.getHistory());
-
         int epicId = taskManager.addEpicTask( new Epic("Покупки", "Сходить в магазин за едой") );
         myAssert(taskManager.getEpic(epicId).getState() == TaskState.NEW);
-        System.out.println("История изменений: " + taskManager.getHistory());
 
         int subTaskId1 = taskManager.addSubTask(new SubTask("Список покупок", "Составить список покупок", TaskState.DONE, epicId));
         myAssert(taskManager.getEpic(epicId).getState()== TaskState.DONE);
 
         int subTaskId2 = taskManager.addSubTask(new SubTask("Купить продукты", "Дойти до магазина и купить продукты", TaskState.NEW, epicId));
         myAssert(taskManager.getEpic(epicId).getState() == TaskState.IN_PROGRESS);
-        System.out.println("История изменений: " + taskManager.getHistory());
+        taskManager.getSubTask(subTaskId1);
+        taskManager.getSubTask(subTaskId2);
+        System.out.println("История тасков: " + taskManager.getHistory());
 
         myAssert(subTaskId1 != subTaskId2);
         myAssert(epicId != subTaskId1);
-        myAssert(taskId1 != subTaskId2);
-        myAssert(taskId2 != subTaskId1);
 
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getSubTasks());
         myAssert(taskManager.getSubTasks().equals(taskManager.getAllSubtasksInEpic(taskManager.getEpic(epicId))));
 
         taskManager.removeTask(subTaskId2);
+        System.out.println("История тасков: " + taskManager.getHistory());
         myAssert(taskManager.getEpic(epicId).getState() == TaskState.NEW);
         System.out.println(taskManager.getEpics());
         myAssert(taskManager.getAllSubtasksInEpic(taskManager.getEpic(epicId)).size() == 1);
@@ -64,6 +51,8 @@ public class Main {
         myAssert(taskManager.getEpic(epicId).getState() == TaskState.DONE);
 
         taskManager.removeAllSubTasks();
+        System.out.println("История тасков: " + taskManager.getHistory());
+
         myAssert(taskManager.getSubTasks().size() == 0);
         myAssert(taskManager.getEpic(epicId).getState() == TaskState.NEW);
 
@@ -71,10 +60,6 @@ public class Main {
         taskManager.removeAllEpicTasks();
         myAssert(taskManager.getSubTasks().size() == 0);
 
-
-        List<Task> tasksInHistory = taskManager.getHistory();
-        System.out.println("История тасков:");
-        System.out.println(tasksInHistory);
-        myAssert(tasksInHistory.size() <= 10);
+        System.out.println("История тасков:" + taskManager.getHistory());
     }
 }
