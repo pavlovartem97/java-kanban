@@ -1,19 +1,17 @@
 package manager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
-import tasks.TaskState;
+
+import java.util.List;
 
 public interface TaskManager {
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
-    ArrayList<SubTask> getSubTasks();
+    List<SubTask> getSubTasks();
 
-    ArrayList<Epic> getEpics();
+    List<Epic> getEpics();
 
     void removeAllTasks();
 
@@ -41,7 +39,7 @@ public interface TaskManager {
 
     void removeTask(int taskId);
 
-    ArrayList<SubTask> getAllSubtasksInEpic(Epic epicTask);
+    List<SubTask> getAllSubtasksInEpic(Epic epicTask);
 
     List<Task> getHistory();
 }

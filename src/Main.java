@@ -1,29 +1,26 @@
-import manager.InMemoryTaskManager;
 import manager.Managers;
 import manager.TaskManager;
 import tasks.Epic;
 import tasks.SubTask;
-import tasks.Task;
 import tasks.TaskState;
-
-import java.util.List;
 
 public class Main {
 
     // Почему-то обычный assert не срабатывает, поэтому написан для тестов в таком виде
-    static void myAssert(boolean statement){
-        if (!statement){
+    static void myAssert(boolean statement) {
+        if (!statement) {
             throw new AssertionError();
         }
     }
+
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
 
-        int epicId = taskManager.addEpicTask( new Epic("Покупки", "Сходить в магазин за едой") );
+        int epicId = taskManager.addEpicTask(new Epic("Покупки", "Сходить в магазин за едой"));
         myAssert(taskManager.getEpic(epicId).getState() == TaskState.NEW);
 
         int subTaskId1 = taskManager.addSubTask(new SubTask("Список покупок", "Составить список покупок", TaskState.DONE, epicId));
-        myAssert(taskManager.getEpic(epicId).getState()== TaskState.DONE);
+        myAssert(taskManager.getEpic(epicId).getState() == TaskState.DONE);
 
         int subTaskId2 = taskManager.addSubTask(new SubTask("Купить продукты", "Дойти до магазина и купить продукты", TaskState.NEW, epicId));
         myAssert(taskManager.getEpic(epicId).getState() == TaskState.IN_PROGRESS);

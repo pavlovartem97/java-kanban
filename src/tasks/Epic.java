@@ -12,7 +12,7 @@ public class Epic extends Task {
     public void addSubTask(int subTaskId) {
         subTaskIds.add(subTaskId);
     }
-    
+
     @Override
     public String toString() {
         return "Epic{" +
@@ -25,7 +25,7 @@ public class Epic extends Task {
     }
 
     public void removeSubTask(int subTaskId) {
-        for(int i = 0; i < subTaskIds.size(); ++i) {
+        for (int i = 0; i < subTaskIds.size(); ++i) {
             if (subTaskIds.get(i) == subTaskId) {
                 subTaskIds.remove(i);
             }

@@ -8,6 +8,7 @@ public class SubTask extends Task {
         super(taskName, taskDescription, state);
         this.epicTaskId = epicTaskId;
     }
+
     public int getEpicId() {
         return epicTaskId;
     }
