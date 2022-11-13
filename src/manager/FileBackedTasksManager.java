@@ -106,17 +106,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     private TaskState getTaskStateFormString(String state) throws ManagerSaveException {
-
-        if (state.equals(TaskState.IN_PROGRESS.toString())) {
-            return TaskState.IN_PROGRESS;
-        } else if (state.equals(TaskState.DONE.toString())) {
-            return TaskState.DONE;
-        } else if (state.equals(TaskState.NEW.toString())) {
-            return TaskState.NEW;
-        } else {
+        try {
+            return TaskState.valueOf(state);
+        } catch (IllegalArgumentException e) {
             throw new ManagerSaveException("Неопознанное состояние задачи: " + state);
         }
-
     }
 
     private int addTaskFromString(String taskStr) throws ManagerSaveException {
@@ -137,21 +131,25 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String taskDescription = items[3];
         TaskState taskState = getTaskStateFormString(items[4]);
 
-        if (taskKey.equals(TASK_KEY)) {
-            Task task = new Task(taskName, taskDescription, taskState);
-            task.setTaskId(taskId);
-            super.addTask(task);
-        } else if (taskKey.equals(EPIC_KEY)) {
-            Epic epic = new Epic(taskName, taskDescription);
-            epic.setTaskId(taskId);
-            super.addEpicTask(epic);
-        } else if (taskKey.equals(SUBTASK_KEY)) {
-            int epicId = Integer.parseInt(items[5]);
-            SubTask subTask = new SubTask(taskName, taskDescription, taskState, epicId);
-            subTask.setTaskId(taskId);
-            super.addSubTask(subTask);
-        } else {
-            throw new ManagerSaveException("Неизвестный тип задачи: " + taskKey);
+        switch (taskKey) {
+            case TASK_KEY:
+                Task task = new Task(taskName, taskDescription, taskState);
+                task.setTaskId(taskId);
+                super.addTask(task);
+                break;
+            case EPIC_KEY:
+                Epic epic = new Epic(taskName, taskDescription);
+                epic.setTaskId(taskId);
+                super.addEpicTask(epic);
+                break;
+            case SUBTASK_KEY:
+                int epicId = Integer.parseInt(items[5]);
+                SubTask subTask = new SubTask(taskName, taskDescription, taskState, epicId);
+                subTask.setTaskId(taskId);
+                super.addSubTask(subTask);
+                break;
+            default:
+                throw new ManagerSaveException("Неизвестный тип задачи: " + taskKey);
         }
 
         return taskId;
