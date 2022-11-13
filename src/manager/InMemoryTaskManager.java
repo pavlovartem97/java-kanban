@@ -12,13 +12,15 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
 
-    private final Map<Integer, SubTask> subTasks = new HashMap<>();
+    protected final Map<Integer, SubTask> subTasks = new HashMap<>();
 
-    private final Map<Integer, Epic> epics = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
 
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected final HistoryManager historyManager = Managers.getDefaultHistory();
+
+    protected int uniqueIdNumber = 0;
 
     @Override
     public List<Task> getTasks() {
@@ -114,6 +116,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int addTask(Task task) {
+        if (task.getTaskId() == -1) {
+            task.setTaskId(uniqueIdNumber++);
+        }
         tasks.put(task.getTaskId(), task);
         System.out.println("Новый обычный таск с Id " + task.getTaskId() + " успешно добавлен");
         return task.getTaskId();
@@ -121,6 +126,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int addSubTask(SubTask task) {
+        if (task.getTaskId() == -1) {
+            task.setTaskId(uniqueIdNumber++);
+        }
         if (epics.containsKey(task.getEpicId())) {
             subTasks.put(task.getTaskId(), task);
             epics.get(task.getEpicId()).addSubTask(task.getTaskId());
@@ -134,6 +142,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int addEpicTask(Epic task) {
+        if (task.getTaskId() == -1) {
+            task.setTaskId(uniqueIdNumber++);
+        }
         epics.put(task.getTaskId(), task);
         System.out.println("Новый эпик с Id " + task.getTaskId() + " успешно добавлен");
         return task.getTaskId();
@@ -238,7 +249,7 @@ public class InMemoryTaskManager implements TaskManager {
         int newTasksCount = 0;
         int doneTasksCount = 0;
 
-        for (Task task : subTasks.values()) {
+        for (Task task : subTasksInEpic) {
             switch (task.getState()) {
                 case NEW:
                     newTasksCount++;

@@ -4,26 +4,28 @@ import java.util.Objects;
 
 public class Task {
 
-    // Уникальный Id
-    private static int uniqueId = 0;
-
     protected String taskName;
 
     protected String taskDescription;
 
-    final protected int taskId;
+    protected int taskId = -1;
     protected TaskState state;
 
     public Task(String taskName, String taskDescription, TaskState state) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.state = state;
-        this.taskId = uniqueId++;
     }
 
     public TaskState getState() {
         return state;
     }
+
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
+    }
+
+    ;
 
     public int getTaskId() {
         return taskId;
@@ -51,12 +53,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "taskName='" + taskName + '\'' +
-                ", taskDescription='" + taskDescription + '\'' +
-                ", taskId=" + taskId +
-                ", state=" + state +
-                '}';
+        return "" + taskId + ";" + taskName + ";" + taskDescription + ";" + state + ";";
     }
 
     @Override

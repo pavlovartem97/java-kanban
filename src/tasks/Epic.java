@@ -3,6 +3,7 @@ package tasks;
 import java.util.ArrayList;
 
 public class Epic extends Task {
+
     private ArrayList<Integer> subTaskIds = new ArrayList<>();
 
     public Epic(String taskName, String taskDescription) {
@@ -15,13 +16,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Epic{" +
-                "subTaskIds=" + subTaskIds +
-                ", taskName='" + taskName + '\'' +
-                ", taskDescription='" + taskDescription + '\'' +
-                ", taskId=" + taskId +
-                ", state=" + state +
-                '}';
+        return "" + taskId + ";" + taskName + ";" + taskDescription + ";" + state + ";";
     }
 
     public void removeSubTask(int subTaskId) {
