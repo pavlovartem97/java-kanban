@@ -23,7 +23,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    static FileBackedTasksManager loadFromFile(File file) {
+    public static FileBackedTasksManager loadFromFile(File file) {
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
         fileBackedTasksManager.load();
         return fileBackedTasksManager;
@@ -56,10 +56,48 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
+    @Override
+    public SubTask getSubTask(int taskId) {
+        SubTask task = super.getSubTask(taskId);
+        save();
+        return task;
+    }
+
+    @Override
+    public Task getTask(int taskId) {
+        Task task = super.getTask(taskId);
+        save();
+        return task;
+    }
+
+    @Override
+    public Epic getEpic(int taskId) {
+        Epic epic = super.getEpic(taskId);
+        save();
+        return epic;
+    }
+
+    @Override
+    public void removeAllTasks() {
+        super.removeAllTasks();
+        save();
+    }
+
+    @Override
+    public void removeAllSubTasks() {
+        super.removeAllSubTasks();
+        save();
+    }
+
+    @Override
+    public void removeAllEpicTasks() {
+        super.removeAllEpicTasks();
+        save();
+    }
+
     private void save() {
         try {
-            try (FileWriter fileWriter = new FileWriter(file);) {
-                BufferedWriter buffer = new BufferedWriter(fileWriter);
+            try (BufferedWriter buffer = new BufferedWriter(new FileWriter(file));) {
                 for (Task task : super.getTasks()) {
                     buffer.write(TASK_KEY + ";" + task.toString() + "-1;" + "\n");
                 }
@@ -72,7 +110,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
                 buffer.write("\n");
                 buffer.write(historyToString() + "\n");
-                buffer.close();
             } catch (IOException error) {
                 throw new ManagerSaveException("неправильная работа с файлом");
             }
@@ -83,8 +120,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private void load() {
         try {
-            try (FileReader fileReader = new FileReader(file);) {
-                BufferedReader buffer = new BufferedReader(fileReader);
+            try (BufferedReader buffer = new BufferedReader(new FileReader(file));) {
                 int maxId = -1;
                 while (buffer.ready()) {
                     String line = buffer.readLine();

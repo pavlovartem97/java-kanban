@@ -19,7 +19,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        File file = new File("C:/Users/Artem/java-kanban/data.txt");
+        File file = new File("data.csv");
         TaskManager taskManager = new FileBackedTasksManager(file);
 
         int epicId = taskManager.addEpicTask(new Epic("Покупки", "Сходить в магазин за едой"));
