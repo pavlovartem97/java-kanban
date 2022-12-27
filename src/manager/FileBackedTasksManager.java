@@ -6,6 +6,7 @@ import tasks.Task;
 import tasks.TaskState;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
@@ -151,7 +152,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private int addTaskFromString(String taskStr) throws ManagerSaveException {
         String[] items = taskStr.split(";");
-        if (items.length != 6) {
+        if (items.length != 8) {
             throw new ManagerSaveException("Некорректные данные в строке: " + taskStr);
         }
 
@@ -166,11 +167,26 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String taskName = items[2];
         String taskDescription = items[3];
         TaskState taskState = getTaskStateFormString(items[4]);
+        LocalDateTime startDate = null;
+        Integer duration = null;
+
+        if (!items[5].isEmpty()) {
+            startDate = LocalDateTime.parse(items[5], Task.dateTimeFormatter);
+        }
+        if (!items[6].isEmpty()) {
+            duration = Integer.parseInt(items[6]);
+        }
 
         switch (taskKey) {
             case TASK_KEY:
                 Task task = new Task(taskName, taskDescription, taskState);
                 task.setTaskId(taskId);
+                if (startDate != null) {
+                    task.setStartTime(startDate);
+                }
+                if (duration != null) {
+                    task.setDuration(duration);
+                }
                 super.addTask(task);
                 break;
             case EPIC_KEY:
@@ -179,9 +195,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 super.addEpicTask(epic);
                 break;
             case SUBTASK_KEY:
-                int epicId = Integer.parseInt(items[5]);
+                int epicId = Integer.parseInt(items[7]);
                 SubTask subTask = new SubTask(taskName, taskDescription, taskState, epicId);
                 subTask.setTaskId(taskId);
+                if (startDate != null) {
+                    subTask.setStartTime(startDate);
+                }
+                if (duration != null) {
+                    subTask.setDuration(duration);
+                }
                 super.addSubTask(subTask);
                 break;
             default:

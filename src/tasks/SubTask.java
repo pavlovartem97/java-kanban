@@ -15,6 +15,16 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "" + taskId + ";" + taskName + ";" + taskDescription + ";" + state + ";" + epicTaskId + ";";
+        return super.toString() + epicTaskId + ";";
+    }
+
+    @Override
+    public SubTask clone() {
+        SubTask subTask = new SubTask(taskName, taskDescription, state, epicTaskId);
+        subTask.duration = duration;
+        subTask.startTime = startTime;
+        subTask.taskId = taskId;
+        subTask.epicTaskId = epicTaskId;
+        return subTask;
     }
 }

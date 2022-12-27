@@ -8,6 +8,9 @@ import tasks.SubTask;
 import tasks.Task;
 import tasks.TaskState;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +26,22 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     protected int taskId;
 
+    protected LocalDateTime startDate = LocalDateTime.of(
+            LocalDate.of(2023, 1, 1), LocalTime.of(10, 00));
+
     protected void initTasks() {
         epicId = taskManager.addEpicTask(new Epic("Epic task", "Epic task description"));
-        subTaskId1 = taskManager.addSubTask(new SubTask("Sub task", "Составить список покупок", TaskState.NEW, epicId));
-        subTaskId2 = taskManager.addSubTask(new SubTask("Купить продукты", "Дойти до магазина и купить продукты", TaskState.NEW, epicId));
-        taskId = taskManager.addTask(new Task("Помыть посуду", "", TaskState.IN_PROGRESS));
+        subTaskId1 = taskManager.addSubTask(
+                new SubTask("Sub task 1", "Task description", TaskState.NEW, epicId)
+        );
+        subTaskId2 = taskManager.addSubTask(
+                new SubTask("Sub task 1", "Task description", TaskState.NEW, epicId)
+        );
+
+        Task task = new Task("Common Task 1", "", TaskState.IN_PROGRESS);
+        task.setStartTime(startDate);
+        task.setDuration(90);
+        taskId = taskManager.addTask(task);
     }
 
     @Test
@@ -111,6 +125,12 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.addTask(task);
         Assertions.assertEquals(taskManager.getTasks().size(), 2);
         Assertions.assertEquals(taskManager.getTask(task.getTaskId()), task);
+
+        Task newTask = new Task("", "", TaskState.NEW);
+        newTask.setStartTime(startDate.plusHours(1));
+        taskManager.addTask(newTask);
+        Assertions.assertEquals(taskManager.getTasks().size(), 2);
+        Assertions.assertNull(taskManager.getTask(newTask.getTaskId()));
     }
 
     @Test
@@ -207,5 +227,42 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         history.remove(1);
         taskManager.removeTask(subTaskId1);
         Assertions.assertEquals(taskManager.getHistory(), history);
+    }
+
+    @Test
+    void getPrioritizedStepTask() {
+        List<Task> prioritizedList = taskManager.getPrioritizedTasks();
+        Task task = taskManager.getTask(taskId);
+        Assertions.assertEquals(prioritizedList.get(0), task);
+
+        SubTask subTask = taskManager.getSubTask(subTaskId1);
+        subTask.setStartTime(startDate.minusHours(2));
+        subTask.setDuration(60);
+        taskManager.updateSubTask(subTask);
+        prioritizedList = taskManager.getPrioritizedTasks();
+        Assertions.assertEquals(prioritizedList.get(0), subTask);
+        Assertions.assertEquals(prioritizedList.get(1), task);
+    }
+
+    @Test
+    void updateEpicTimeTest() {
+        Assertions.assertNull(taskManager.getEpic(epicId).getStartTime());
+        Assertions.assertNull(taskManager.getEpic(epicId).getEndTime());
+
+        SubTask subTask1 = taskManager.getSubTask(subTaskId1);
+        subTask1.setStartTime(startDate.minusHours(2));
+        subTask1.setDuration(60);
+        taskManager.updateSubTask(subTask1);
+
+        Assertions.assertEquals(taskManager.getEpic(epicId).getStartTime(), startDate.minusHours(2));
+        Assertions.assertEquals(taskManager.getEpic(epicId).getEndTime(), startDate.minusHours(2).plusMinutes(60));
+
+        SubTask subTask2 = taskManager.getSubTask(subTaskId2);
+        subTask2.setStartTime(startDate.plusHours(5));
+        subTask2.setDuration(90);
+        taskManager.updateSubTask(subTask2);
+
+        Assertions.assertEquals(taskManager.getEpic(epicId).getStartTime(), startDate.minusHours(2));
+        Assertions.assertEquals(taskManager.getEpic(epicId).getEndTime(), startDate.plusHours(5).plusMinutes(90));
     }
 }
