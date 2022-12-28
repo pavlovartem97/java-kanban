@@ -88,7 +88,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     public void removeAllSubtasksTest() {
         taskManager.removeAllSubTasks();
         Assertions.assertEquals(taskManager.getSubTasks(), new ArrayList<SubTask>());
-        Assertions.assertEquals(taskManager.getEpic(epicId).getAllSubTasksId().size(), 0);
+        Assertions.assertTrue(taskManager.getEpic(epicId).getAllSubTasksId().isEmpty());
     }
 
     @Test
@@ -177,7 +177,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void removeTaskTest() {
         taskManager.removeTask(taskId);
-        Assertions.assertEquals(taskManager.getTasks().size(), 0);
+        Assertions.assertTrue(taskManager.getTasks().isEmpty());
     }
 
     @Test

@@ -15,10 +15,10 @@ class EpicTest {
 
     private Epic epic;
 
-    private List<SubTask> generateSubtasks(TaskState[] taskStates) {
+    private List<SubTask> generateSubtasks(List<TaskState> taskStates) {
         List<SubTask> subTasks = new ArrayList<>();
-        for (int i = 0; i < taskStates.length; ++i) {
-            subTasks.add(new SubTask("Subtask name", "Subtask description", taskStates[i], epic.getTaskId()));
+        for (int i = 0; i < taskStates.size(); ++i) {
+            subTasks.add(new SubTask("Subtask name", "Subtask description", taskStates.get(i), epic.getTaskId()));
         }
         return subTasks;
     }
@@ -30,34 +30,34 @@ class EpicTest {
 
     @Test
     public void testEmptySubtaskList() {
-        Assertions.assertEquals(epic.getAllSubTasksId().size(), 0);
+        Assertions.assertTrue(epic.getAllSubTasksId().isEmpty());
         Assertions.assertEquals(epic.getState(), TaskState.NEW);
     }
 
     @Test
     public void testAllSubtasksNew() {
-        List<SubTask> subTasks = generateSubtasks(new TaskState[]{TaskState.NEW, TaskState.NEW});
+        List<SubTask> subTasks = generateSubtasks(List.of(TaskState.NEW, TaskState.NEW));
         InMemoryTaskManager.updateEpicTaskState(epic, subTasks);
         Assertions.assertEquals(epic.getState(), TaskState.NEW);
     }
 
     @Test
     public void testAllSubtasksDone() {
-        List<SubTask> subTasks = generateSubtasks(new TaskState[]{TaskState.DONE, TaskState.DONE});
+        List<SubTask> subTasks = generateSubtasks(List.of(TaskState.DONE, TaskState.DONE));
         InMemoryTaskManager.updateEpicTaskState(epic, subTasks);
         Assertions.assertEquals(epic.getState(), TaskState.DONE);
     }
 
     @Test
     public void testAllSubtasksInProgress() {
-        List<SubTask> subTasks = generateSubtasks(new TaskState[]{TaskState.IN_PROGRESS, TaskState.IN_PROGRESS});
+        List<SubTask> subTasks = generateSubtasks(List.of(TaskState.IN_PROGRESS, TaskState.IN_PROGRESS));
         InMemoryTaskManager.updateEpicTaskState(epic, subTasks);
         Assertions.assertEquals(epic.getState(), TaskState.IN_PROGRESS);
     }
 
     @Test
     public void testAllSubtasksNewAndDone() {
-        List<SubTask> subTasks = generateSubtasks(new TaskState[]{TaskState.NEW, TaskState.DONE});
+        List<SubTask> subTasks = generateSubtasks(List.of(TaskState.NEW, TaskState.DONE));
         InMemoryTaskManager.updateEpicTaskState(epic, subTasks);
         Assertions.assertEquals(epic.getState(), TaskState.IN_PROGRESS);
     }

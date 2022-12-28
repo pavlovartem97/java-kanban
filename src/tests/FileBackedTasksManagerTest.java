@@ -28,10 +28,10 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<InMemoryTaskMana
         taskManager.removeAllEpicTasks();
 
         TaskManager newTaskManager = FileBackedTasksManager.loadFromFile(file);
-        Assertions.assertEquals(newTaskManager.getTasks().size(), 0);
-        Assertions.assertEquals(newTaskManager.getSubTasks().size(), 0);
-        Assertions.assertEquals(newTaskManager.getEpics().size(), 0);
-        Assertions.assertEquals(newTaskManager.getHistory().size(), 0);
+        Assertions.assertTrue(newTaskManager.getTasks().isEmpty());
+        Assertions.assertTrue(newTaskManager.getSubTasks().isEmpty());
+        Assertions.assertTrue(newTaskManager.getEpics().isEmpty());
+        Assertions.assertTrue(newTaskManager.getHistory().isEmpty());
     }
 
     @Test
@@ -45,18 +45,18 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<InMemoryTaskMana
 
         TaskManager newTaskManager = FileBackedTasksManager.loadFromFile(file);
         Assertions.assertEquals(newTaskManager.getTasks(), taskManager.getTasks());
-        Assertions.assertEquals(newTaskManager.getSubTasks().size(), 0);
+        Assertions.assertTrue(newTaskManager.getSubTasks().isEmpty());
         Assertions.assertEquals(newTaskManager.getEpics(), taskManager.getEpics());
-        Assertions.assertEquals(newTaskManager.getEpics().get(0).getAllSubTasksId().size(), 0);
+        Assertions.assertTrue(newTaskManager.getEpics().get(0).getAllSubTasksId().isEmpty());
         Assertions.assertEquals(newTaskManager.getHistory(), taskManager.getHistory());
     }
 
     @Test
     public void historyManagerTest() {
-        Assertions.assertEquals(taskManager.getHistory().size(), 0);
+        Assertions.assertTrue(taskManager.getHistory().isEmpty());
 
         TaskManager newTaskManager = FileBackedTasksManager.loadFromFile(file);
-        Assertions.assertEquals(newTaskManager.getHistory().size(), 0);
+        Assertions.assertTrue(newTaskManager.getHistory().isEmpty());
         Assertions.assertEquals(newTaskManager.getSubTasks(), taskManager.getSubTasks());
     }
 }
