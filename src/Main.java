@@ -1,12 +1,34 @@
-public class Main {
-    /*public static void main(String[] args) {
+import manager.HttpTaskManager;
+import manager.Managers;
+import manager.TaskManager;
+import server.KVServer;
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+import tasks.TaskState;
 
-        File file = new File("data.csv");
-        TaskManager taskManager = new FileBackedTasksManager(file);
+import java.io.IOException;
+
+public class Main {
+
+    static void myAssert(boolean statement) {
+        if (!statement) {
+            throw new AssertionError();
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        KVServer kvServer = new KVServer();
+        kvServer.start();
+
+        TaskManager taskManager = Managers.getDefault();
 
         int epicId = taskManager.addEpicTask(new Epic("Покупки", "Сходить в магазин за едой"));
-        int subTaskId1 = taskManager.addSubTask(new SubTask("Список покупок", "Составить список покупок", TaskState.DONE, epicId));
-        int subTaskId2 = taskManager.addSubTask(new SubTask("Купить продукты", "Дойти до магазина и купить продукты", TaskState.NEW, epicId));
+        int subTaskId1 = taskManager.addSubTask(
+                new SubTask("Список покупок", "Составить список покупок", TaskState.DONE, epicId));
+        int subTaskId2 = taskManager.addSubTask(
+                new SubTask("Купить продукты", "Дойти до магазина и купить продукты", TaskState.NEW, epicId));
         int taskId = taskManager.addTask(new Task("Помыть посуду", "", TaskState.IN_PROGRESS));
 
         taskManager.getSubTask(subTaskId2);
@@ -14,13 +36,14 @@ public class Main {
         taskManager.getSubTask(subTaskId1);
         taskManager.removeTask(subTaskId2);
 
+        HttpTaskManager newTaskManager = Managers.loadTaskManagerFromServer(Managers.getDefaultUrl());
+
         System.out.println("Исходный список задач");
         System.out.println("История тасков: " + taskManager.getHistory());
         System.out.println("Эпики:" + taskManager.getEpics());
         System.out.println("Сабтаски:" + taskManager.getSubTasks());
         System.out.println("Таски:" + taskManager.getTasks());
 
-        TaskManager newTaskManager = Managers.getFileBackendManager(file);
         System.out.println("Список задача загруженный из newTaskManager");
         System.out.println("История тасков: " + newTaskManager.getHistory());
         System.out.println("Эпики:" + newTaskManager.getEpics());
@@ -42,11 +65,12 @@ public class Main {
         newTaskManager.removeTask(epicId);
         newTaskManager.removeTask(newsubTaskId1);
 
-        TaskManager newTaskManager2 = Managers.getFileBackendManager(file);
-
+        TaskManager newTaskManager2 = Managers.loadTaskManagerFromServer(Managers.getDefaultUrl());
         myAssert(newTaskManager2.getHistory().toString().equals(newTaskManager.getHistory().toString()));
         myAssert(newTaskManager2.getEpics().toString().equals(newTaskManager.getEpics().toString()));
         myAssert(newTaskManager2.getSubTasks().toString().equals(newTaskManager.getSubTasks().toString()));
         myAssert(newTaskManager2.getTasks().toString().equals(newTaskManager.getTasks().toString()));
-    }*/
+
+        kvServer.stop();
+    }
 }

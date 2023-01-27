@@ -1,24 +1,35 @@
 package tests;
 
-import manager.FileBackedTasksManager;
-import manager.InMemoryTaskManager;
+import manager.HttpTaskManager;
+import manager.Managers;
 import manager.TaskManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import server.KVServer;
 import tasks.SubTask;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
+public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
 
-    private final String fileName = "data.csv";
+    private final String url = Managers.getDefaultUrl();
+    private KVServer kvServer;
+
 
     @BeforeEach
-    public void setUp() {
-        taskManager = new FileBackedTasksManager(fileName);
+    public void setUp() throws IOException, InterruptedException {
+        kvServer = new KVServer();
+        kvServer.start();
+        taskManager = new HttpTaskManager(url);
         initTasks();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        kvServer.stop();
     }
 
     @Test
@@ -27,7 +38,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         taskManager.removeAllSubTasks();
         taskManager.removeAllEpicTasks();
 
-        TaskManager newTaskManager = FileBackedTasksManager.loadFromFile(fileName);
+        TaskManager newTaskManager = Managers.loadTaskManagerFromServer(url);
         Assertions.assertTrue(newTaskManager.getTasks().isEmpty());
         Assertions.assertTrue(newTaskManager.getSubTasks().isEmpty());
         Assertions.assertTrue(newTaskManager.getEpics().isEmpty());
@@ -43,7 +54,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         taskManager.getEpic(taskManager.getEpics().get(0).getTaskId());
         taskManager.getTask(taskManager.getTasks().get(0).getTaskId());
 
-        TaskManager newTaskManager = FileBackedTasksManager.loadFromFile(fileName);
+        TaskManager newTaskManager = Managers.loadTaskManagerFromServer(url);
         Assertions.assertEquals(newTaskManager.getTasks(), taskManager.getTasks());
         Assertions.assertTrue(newTaskManager.getSubTasks().isEmpty());
         Assertions.assertEquals(newTaskManager.getEpics(), taskManager.getEpics());
@@ -55,14 +66,16 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     public void historyManagerTest() {
         Assertions.assertTrue(taskManager.getHistory().isEmpty());
 
-        TaskManager newTaskManager = FileBackedTasksManager.loadFromFile(fileName);
+        TaskManager newTaskManager = Managers.loadTaskManagerFromServer(url);
         Assertions.assertTrue(newTaskManager.getHistory().isEmpty());
         Assertions.assertEquals(newTaskManager.getSubTasks(), taskManager.getSubTasks());
     }
 
     @Test
-    public void prioritizedTasksTest(){
-        TaskManager newTaskManager = FileBackedTasksManager.loadFromFile(fileName);
+    public void prioritizedTasksTest() {
+        TaskManager newTaskManager = Managers.loadTaskManagerFromServer(url);
+        System.out.println(newTaskManager.getPrioritizedTasks());
+        System.out.println(taskManager.getPrioritizedTasks());
         Assertions.assertEquals(newTaskManager.getPrioritizedTasks(), taskManager.getPrioritizedTasks());
     }
 }

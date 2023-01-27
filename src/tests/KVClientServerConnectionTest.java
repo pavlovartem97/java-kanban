@@ -1,5 +1,6 @@
 package tests;
 
+import manager.Managers;
 import org.junit.jupiter.api.*;
 import server.KVClient;
 import server.KVServer;
@@ -7,22 +8,13 @@ import server.KVServer;
 import java.io.IOException;
 
 public class KVClientServerConnectionTest {
-    private static final String url = "http://localhost:8078/";
+    private static final String url = Managers.getDefaultUrl();
 
-    private static KVServer kvServer;
-
-    @BeforeAll
-    public static void beforeAll(){
-        try {
-            kvServer = new KVServer();
-        }
-        catch (Exception ex){
-            ex.printStackTrace();
-        }
-    }
+    private KVServer kvServer;
 
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() throws IOException, InterruptedException {
+        kvServer = new KVServer();
         kvServer.start();
     }
 
@@ -42,5 +34,8 @@ public class KVClientServerConnectionTest {
         KVClient kvClient = new KVClient(url);
         kvClient.put("key", "value");
         Assertions.assertEquals(kvClient.load("key"), "value");
+
+        kvClient.put("key", "new_value");
+        Assertions.assertEquals(kvClient.load("key"), "new_value");
     }
 }

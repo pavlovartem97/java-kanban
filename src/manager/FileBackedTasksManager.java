@@ -17,15 +17,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private final String EPIC_KEY = "EPIC";
 
-    private final File file;
+    private final String fileName;
 
-    public FileBackedTasksManager(File file) {
+    public FileBackedTasksManager(String fileName) {
         super();
-        this.file = file;
+        this.fileName = fileName;
     }
 
-    public static FileBackedTasksManager loadFromFile(File file) {
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+    public static FileBackedTasksManager loadFromFile(String fileName) {
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(fileName);
         fileBackedTasksManager.load();
         return fileBackedTasksManager;
     }
@@ -96,9 +96,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
-    private void save() {
+    protected void save() {
         try {
-            try (BufferedWriter buffer = new BufferedWriter(new FileWriter(file));) {
+            try (BufferedWriter buffer = new BufferedWriter(new FileWriter(fileName));) {
                 for (Task task : super.getTasks()) {
                     buffer.write(TASK_KEY + ";" + task.toString() + "-1;" + "\n");
                 }
@@ -119,9 +119,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private void load() {
+    protected void load() {
         try {
-            try (BufferedReader buffer = new BufferedReader(new FileReader(file));) {
+            try (BufferedReader buffer = new BufferedReader(new FileReader(fileName));) {
                 int maxId = -1;
                 while (buffer.ready()) {
                     String line = buffer.readLine();

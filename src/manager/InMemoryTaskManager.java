@@ -9,15 +9,15 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Task> tasks = new HashMap<>();
 
-    protected final Map<Integer, SubTask> subTasks = new HashMap<>();
+    protected Map<Integer, SubTask> subTasks = new HashMap<>();
 
-    protected final Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
 
-    protected final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected HistoryManager historyManager = Managers.getDefaultHistory();
 
-    protected final TreeSet<Task> prioritizedTasks =
+    protected TreeSet<Task> prioritizedTasks =
             new TreeSet<>(
                     (Task task1, Task task2) -> {
                         if (task2.getStartTime() == null) {
@@ -184,7 +184,7 @@ public class InMemoryTaskManager implements TaskManager {
                 System.out.println("Нельзя обновить таск в связи с тем, что это время занято");
                 return;
             }
-            prioritizedTasks.removeIf((Task task_) -> task_.getTaskId() == task.getTaskId());
+            prioritizedTasks.removeIf((Task task_) -> Objects.equals(task_.getTaskId(), task.getTaskId()));
             prioritizedTasks.add(task);
             subTasks.put(task.getTaskId(), task);
             updateEpicTaskState(task.getEpicId());
@@ -300,7 +300,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getPrioritizedTasks() {
-        return new ArrayList<Task>(prioritizedTasks);
+        return new ArrayList<>(prioritizedTasks);
     }
 
     public static void updateEpicTaskState(Epic epic, List<SubTask> subTasksInEpic) {

@@ -1,18 +1,30 @@
 package manager;
 
-import java.io.File;
+import com.google.gson.Gson;
 
 public class Managers {
 
+    private static final Gson gson = new Gson();
+
+    public static Gson getGson(){ return gson; };
+
+    private static final String url = "http://localhost:8078/";
+
+    public static String getDefaultUrl(){ return url; };
+
     static public TaskManager getDefault() {
-        return new InMemoryTaskManager();
+        return new HttpTaskManager(url);
     }
 
     static public HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }
 
-    static public FileBackedTasksManager getFileBackendManager(File file) {
-        return FileBackedTasksManager.loadFromFile(file);
+    static public HttpTaskManager loadTaskManagerFromServer(String url){
+        return HttpTaskManager.loadFromServer(url);
+    };
+
+    static public FileBackedTasksManager getFileBackendManager(String fileName) {
+        return FileBackedTasksManager.loadFromFile(fileName);
     }
 }

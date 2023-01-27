@@ -8,16 +8,12 @@ import manager.TaskManager;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
-import tasks.TaskState;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -27,7 +23,7 @@ public class HttpTaskServer {
 
     public static final int PORT = 8080;
 
-    private static final Gson gson = new Gson();
+    private static final Gson gson = Managers.getGson();
 
     private final TaskManager taskManager = Managers.getDefault();
 
@@ -35,26 +31,7 @@ public class HttpTaskServer {
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    protected void initTasks() {
-        int epicId = taskManager.addEpicTask(new Epic("Epic task", "Epic task description"));
-        taskManager.addSubTask(
-                new SubTask("Sub task 1", "Task description", TaskState.NEW, epicId)
-        );
-        taskManager.addSubTask(
-                new SubTask("Sub task 1", "Task description", TaskState.NEW, epicId)
-        );
-
-        LocalDateTime startDate = LocalDateTime.of(
-                LocalDate.of(2023, 1, 1), LocalTime.of(10, 0));
-
-        Task task = new Task("Common Task 1", "", TaskState.IN_PROGRESS);
-        task.setStartTime(startDate);
-        task.setDuration(90);
-        taskManager.addTask(task);
-    }
-
     public HttpTaskServer() throws IOException {
-        initTasks();
         server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         server.createContext("/tasks/task", this::taskHandler);
         server.createContext("/tasks/subtask", this::subTaskHandler);
@@ -338,11 +315,6 @@ public class HttpTaskServer {
         } catch (NumberFormatException exception) {
             return Optional.empty();
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-        HttpTaskServer httpTaskServer = new HttpTaskServer();
-        httpTaskServer.start();
     }
 
     public void start() {
