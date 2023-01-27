@@ -33,29 +33,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getTasks() {
-        List<Task> taskList = new ArrayList<>();
-        for (Task task : tasks.values()) {
-            taskList.add(task);
-        }
-        return taskList;
+        return new ArrayList<>(tasks.values());
     }
 
     @Override
     public List<SubTask> getSubTasks() {
-        List<SubTask> taskList = new ArrayList<>();
-        for (SubTask task : subTasks.values()) {
-            taskList.add(task);
-        }
-        return taskList;
+        return new ArrayList<>(subTasks.values());
     }
 
     @Override
     public List<Epic> getEpics() {
-        List<Epic> taskList = new ArrayList<>();
-        for (Epic task : epics.values()) {
-            taskList.add(task);
-        }
-        return taskList;
+        return new ArrayList<>(epics.values());
     }
 
     @Override
@@ -180,7 +168,7 @@ public class InMemoryTaskManager implements TaskManager {
                 System.out.println("Нельзя обновить таск в связи с тем, что это время занято");
                 return;
             }
-            prioritizedTasks.removeIf((Task task_) -> task_.getTaskId() == task.getTaskId());
+            prioritizedTasks.removeIf((Task task_) -> Objects.equals(task_.getTaskId(), task.getTaskId()));
             prioritizedTasks.add(task);
             tasks.put(task.getTaskId(), task);
             System.out.println("Задача с Id " + task.getTaskId() + " успешно обновлена");

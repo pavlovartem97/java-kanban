@@ -20,9 +20,7 @@ public class Epic extends Task {
         if (subTaskIds == null) {
             subTaskIds = new TreeSet<>();
         }
-        if (!subTaskIds.contains(subTaskId)) {
-            subTaskIds.add(subTaskId);
-        }
+        subTaskIds.add(subTaskId);
     }
 
     @Override

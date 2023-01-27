@@ -27,8 +27,6 @@ public class HttpTaskServer {
 
     public static final int PORT = 8080;
 
-    private static final String fileName = "data.csv";
-
     private static final Gson gson = new Gson();
 
     private final TaskManager taskManager = Managers.getDefault();
@@ -39,20 +37,20 @@ public class HttpTaskServer {
 
     protected void initTasks() {
         int epicId = taskManager.addEpicTask(new Epic("Epic task", "Epic task description"));
-        int subTaskId1 = taskManager.addSubTask(
+        taskManager.addSubTask(
                 new SubTask("Sub task 1", "Task description", TaskState.NEW, epicId)
         );
-        int subTaskId2 = taskManager.addSubTask(
+        taskManager.addSubTask(
                 new SubTask("Sub task 1", "Task description", TaskState.NEW, epicId)
         );
 
         LocalDateTime startDate = LocalDateTime.of(
-                LocalDate.of(2023, 1, 1), LocalTime.of(10, 00));
+                LocalDate.of(2023, 1, 1), LocalTime.of(10, 0));
 
         Task task = new Task("Common Task 1", "", TaskState.IN_PROGRESS);
         task.setStartTime(startDate);
         task.setDuration(90);
-        int taskId = taskManager.addTask(task);
+        taskManager.addTask(task);
     }
 
     public HttpTaskServer() throws IOException {

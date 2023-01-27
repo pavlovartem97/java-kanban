@@ -3,6 +3,7 @@ package tasks;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Task {
 
@@ -88,7 +89,7 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return taskId == task.taskId
+        return Objects.equals(taskId, task.taskId)
                 && taskName.equals(task.taskName)
                 && taskDescription.equals(task.taskDescription)
                 && state.equals(task.state)

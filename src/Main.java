@@ -1,12 +1,4 @@
 public class Main {
-
-    // Почему-то обычный assert не срабатывает, поэтому написан для тестов в таком виде
-    static void myAssert(boolean statement) {
-        if (!statement) {
-            throw new AssertionError();
-        }
-    }
-
     /*public static void main(String[] args) {
 
         File file = new File("data.csv");
