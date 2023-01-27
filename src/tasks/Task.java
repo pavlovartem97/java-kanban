@@ -11,7 +11,7 @@ public class Task {
 
     protected String taskDescription;
 
-    protected int taskId = -1;
+    protected Integer taskId = null;
 
     protected TaskState state;
 
@@ -49,12 +49,12 @@ public class Task {
         return state;
     }
 
-    public void setTaskId(int taskId) {
+    public void setTaskId(Integer taskId) {
         this.taskId = taskId;
     }
 
-    public int getTaskId() {
-        return taskId;
+    public Integer getTaskId() {
+        return taskId == null ? -1 : taskId;
     }
 
     public void setState(TaskState state) {

@@ -1,13 +1,3 @@
-import manager.FileBackedTasksManager;
-import manager.Managers;
-import manager.TaskManager;
-import tasks.Epic;
-import tasks.SubTask;
-import tasks.Task;
-import tasks.TaskState;
-
-import java.io.File;
-
 public class Main {
 
     // Почему-то обычный assert не срабатывает, поэтому написан для тестов в таком виде
@@ -17,7 +7,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         File file = new File("data.csv");
         TaskManager taskManager = new FileBackedTasksManager(file);
@@ -66,5 +56,5 @@ public class Main {
         myAssert(newTaskManager2.getEpics().toString().equals(newTaskManager.getEpics().toString()));
         myAssert(newTaskManager2.getSubTasks().toString().equals(newTaskManager.getSubTasks().toString()));
         myAssert(newTaskManager2.getTasks().toString().equals(newTaskManager.getTasks().toString()));
-    }
+    }*/
 }

@@ -2,12 +2,13 @@ package tasks;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Epic extends Task {
 
-    private ArrayList<Integer> subTaskIds = new ArrayList<>();
+    private Set<Integer> subTaskIds = new TreeSet<>();
 
     private LocalDateTime endDateTime;
 
@@ -16,7 +17,12 @@ public class Epic extends Task {
     }
 
     public void addSubTask(int subTaskId) {
-        subTaskIds.add(subTaskId);
+        if (subTaskIds == null) {
+            subTaskIds = new TreeSet<>();
+        }
+        if (!subTaskIds.contains(subTaskId)) {
+            subTaskIds.add(subTaskId);
+        }
     }
 
     @Override
@@ -34,18 +40,20 @@ public class Epic extends Task {
     }
 
     public void removeSubTask(int subTaskId) {
-        for (int i = 0; i < subTaskIds.size(); ++i) {
-            if (subTaskIds.get(i) == subTaskId) {
-                subTaskIds.remove(i);
-            }
+        if (subTaskIds == null) {
+            subTaskIds = new TreeSet<>();
         }
+        subTaskIds.remove(subTaskId);
     }
 
     public void removeAllSubTasks() {
         subTaskIds.clear();
     }
 
-    public ArrayList<Integer> getAllSubTasksId() {
+    public Set<Integer> getAllSubTasksId() {
+        if (subTaskIds == null) {
+            subTaskIds = new TreeSet<>();
+        }
         return subTaskIds;
     }
 

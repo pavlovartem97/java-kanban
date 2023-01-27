@@ -15,6 +15,4 @@ public class Managers {
     static public FileBackedTasksManager getFileBackendManager(File file) {
         return FileBackedTasksManager.loadFromFile(file);
     }
-
-    ;
 }

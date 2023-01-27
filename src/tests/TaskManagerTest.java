@@ -185,7 +185,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         List<SubTask> subTasks = new ArrayList<>();
         subTasks.add(taskManager.getSubTask(subTaskId1));
         subTasks.add(taskManager.getSubTask(subTaskId2));
-        Assertions.assertEquals(taskManager.getAllSubtasksInEpic(taskManager.getEpic(epicId)), subTasks);
+        Assertions.assertEquals(taskManager.getAllSubtasksInEpic(epicId), subTasks);
     }
 
     @Test

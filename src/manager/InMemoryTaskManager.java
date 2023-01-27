@@ -252,10 +252,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<SubTask> getAllSubtasksInEpic(Epic epicTask) {
+    public List<SubTask> getAllSubtasksInEpic(int epicTaskId) {
         List<SubTask> subTasksList = new ArrayList<>();
-        for (int subTaskId : epicTask.getAllSubTasksId()) {
-            subTasksList.add(subTasks.get(subTaskId));
+        if (epics.containsKey(epicTaskId)) {
+            Epic epic = epics.get(epicTaskId);
+            for (int subTaskId : epic.getAllSubTasksId()) {
+                subTasksList.add(subTasks.get(subTaskId));
+            }
         }
         return subTasksList;
     }
@@ -343,7 +346,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     public void updateEpicTime(int epicId) {
         Epic epic = epics.get(epicId);
-        List<Integer> subtaskIds = epic.getAllSubTasksId();
+        Set<Integer> subtaskIds = epic.getAllSubTasksId();
         ArrayList<Task> orderedSubTask = new ArrayList<>();
         for (Task task : prioritizedTasks) {
             if (task.getStartTime() != null && subtaskIds.contains(task.getTaskId())) {
