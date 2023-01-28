@@ -14,6 +14,7 @@ public class Epic extends Task {
 
     public Epic(String taskName, String taskDescription) {
         super(taskName, taskDescription, TaskState.NEW);
+        this.type = "EPIC";
     }
 
     public void addSubTask(int subTaskId) {

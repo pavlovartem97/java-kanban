@@ -1,10 +1,13 @@
 package manager;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import server.TaskDeserializer;
+import tasks.Task;
 
 public class Managers {
 
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(Task.class, new TaskDeserializer()).create();
 
     public static Gson getGson() {
         return gson;

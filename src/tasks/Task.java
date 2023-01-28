@@ -20,6 +20,8 @@ public class Task {
 
     protected long duration;
 
+    protected String type = "TASK";
+
     public LocalDateTime getEndTime() {
         return startTime.plus(Duration.ofMinutes(duration));
     }

@@ -393,10 +393,6 @@ public class HttpTaskServerTest {
 
     @Test
     public void getPrioritizedTasksTest() throws IOException, InterruptedException {
-        List<Task> tasks = getPrioritizedTasks();
-        Assertions.assertEquals(tasks.size(), 3);
-        Assertions.assertEquals(tasks.get(0), taskManager.getPrioritizedTasks().get(0));
-        Assertions.assertEquals(tasks.get(1).getTaskId(), taskManager.getPrioritizedTasks().get(1).getTaskId());
-        Assertions.assertEquals(tasks.get(2).getTaskId(), taskManager.getPrioritizedTasks().get(2).getTaskId());
+        Assertions.assertEquals(getPrioritizedTasks(), taskManager.getPrioritizedTasks());
     }
 }
