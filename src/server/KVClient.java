@@ -10,7 +10,7 @@ public class KVClient {
 
     private final HttpClient client = HttpClient.newHttpClient();
 
-    private String apiToken;
+    private final String apiToken;
 
     private final String url;
 
@@ -33,7 +33,7 @@ public class KVClient {
             apiToken = response.body();
             System.out.println("Регистрация на сервере прошла успешно, ваш токен: " + apiToken);
         } else {
-            System.out.println("Ошибка запроса при регистрации на сервере. Попорбуйте еще раз");
+            throw new IOException("Ошибка запроса при регистрации на сервере. Попорбуйте еще раз");
         }
     }
 
@@ -49,7 +49,7 @@ public class KVClient {
         if (response.statusCode() == 200) {
             System.out.println("Данные успешно загружены на сервер");
         } else {
-            System.out.println("Ошибка запроса при загрузке данных на сервер");
+            throw new IOException("Ошибка запроса при загрузке данных на сервер");
         }
     }
 
@@ -67,8 +67,7 @@ public class KVClient {
             System.out.println("Данные с сервера успешно получены");
             return response.body();
         } else {
-            System.out.println("Ошибка запроса при получении данных с сервера");
+            throw new IOException("Ошибка запроса при получении данных с сервера");
         }
-        return null;
     }
 }

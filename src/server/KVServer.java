@@ -28,7 +28,6 @@ public class KVServer {
     }
 
     private void load(HttpExchange h) {
-        // TODO Добавьте получение значения по ключу
         try {
             if (!hasAuth(h)) {
                 System.out.println("Запрос неавторизован, нужен параметр в query API_TOKEN со значением апи-ключа");
