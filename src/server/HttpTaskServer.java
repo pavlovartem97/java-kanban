@@ -127,7 +127,7 @@ public class HttpTaskServer {
                 }
                 case "DELETE": {
                     if (Pattern.matches("^/tasks/epic/$", path)) {
-                        taskManager.removeAllTasks();
+                        taskManager.removeAllEpicTasks();
                         httpExchange.sendResponseHeaders(200, 0);
                     } else if (Pattern.matches("^/tasks/epic/\\?id=\\d+$", path)) {
                         String pathId = path.replaceFirst("/tasks/epic/\\?id=", "");

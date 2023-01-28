@@ -98,7 +98,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     protected void save() {
         try {
-            try (BufferedWriter buffer = new BufferedWriter(new FileWriter(fileName));) {
+            try (BufferedWriter buffer = new BufferedWriter(new FileWriter(fileName))) {
                 for (Task task : super.getTasks()) {
                     buffer.write(TASK_KEY + ";" + task.toString() + "-1;" + "\n");
                 }
@@ -121,7 +121,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     protected void load() {
         try {
-            try (BufferedReader buffer = new BufferedReader(new FileReader(fileName));) {
+            try (BufferedReader buffer = new BufferedReader(new FileReader(fileName))) {
                 int maxId = -1;
                 while (buffer.ready()) {
                     String line = buffer.readLine();
@@ -156,7 +156,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Некорректные данные в строке: " + taskStr);
         }
 
-        Integer taskId = -1;
+        int taskId;
         try {
             taskId = Integer.parseInt(items[1]);
         } catch (Throwable exception) {
@@ -224,12 +224,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private void parseHistoryFromString(String value) throws ManagerSaveException {
         String[] items = value.split(";");
-        for (int i = 0; i < items.length; ++i) {
-            int curId = -1;
+        for (String item : items) {
+            int curId;
             try {
-                curId = Integer.parseInt(items[i]);
+                curId = Integer.parseInt(item);
             } catch (Throwable exception) {
-                throw new ManagerSaveException("Ошибка парсинга id задачи в истории: " + items[i]);
+                throw new ManagerSaveException("Ошибка парсинга id задачи в истории: " + item);
             }
 
             if (tasks.containsKey(curId)) {

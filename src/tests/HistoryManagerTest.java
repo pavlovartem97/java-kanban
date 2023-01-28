@@ -13,7 +13,7 @@ import java.util.List;
 
 public class HistoryManagerTest {
     private final HistoryManager historyManager = Managers.getDefaultHistory();
-    private List<Task> tasks = new ArrayList<>();
+    private final List<Task> tasks = new ArrayList<>();
 
     @BeforeEach
     public void prepareTasks() {

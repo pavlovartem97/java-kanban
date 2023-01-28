@@ -8,11 +8,11 @@ import java.net.http.HttpResponse;
 
 public class KVClient {
 
-    private HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client = HttpClient.newHttpClient();
 
     private String apiToken;
 
-    private String url;
+    private final String url;
 
     public String getApiToken() {
         return apiToken;
@@ -29,11 +29,10 @@ public class KVClient {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200){
+        if (response.statusCode() == 200) {
             apiToken = response.body();
             System.out.println("Регистрация на сервере прошла успешно, ваш токен: " + apiToken);
-        }
-        else{
+        } else {
             System.out.println("Ошибка запроса при регистрации на сервере. Попорбуйте еще раз");
         }
     }
@@ -47,10 +46,9 @@ public class KVClient {
                 .version(HttpClient.Version.HTTP_1_1)
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() == 200){
+        if (response.statusCode() == 200) {
             System.out.println("Данные успешно загружены на сервер");
-        }
-        else{
+        } else {
             System.out.println("Ошибка запроса при загрузке данных на сервер");
         }
     }
@@ -65,7 +63,7 @@ public class KVClient {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() == 200){
+        if (response.statusCode() == 200) {
             System.out.println("Данные с сервера успешно получены");
             return response.body();
         } else {

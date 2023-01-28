@@ -55,15 +55,14 @@ public class Main {
         myAssert(taskManager.getSubTasks().toString().equals(newTaskManager.getSubTasks().toString()));
         myAssert(taskManager.getTasks().toString().equals(newTaskManager.getTasks().toString()));
 
-        int newEpicid = newTaskManager.addEpicTask(new Epic("Английский", "Сделать домашнее задание"));
-        int newsubTaskId1 = newTaskManager.addSubTask(new SubTask("Прослушать аудио", "", TaskState.DONE, newEpicid));
-        int newsubTaskId2 = newTaskManager.addSubTask(new SubTask("Сделать упражнение", "-", TaskState.NEW, newEpicid));
-        int newsubTaskId3 = newTaskManager.addSubTask(new SubTask("Повторить слова", "-", TaskState.IN_PROGRESS, newEpicid));
+        int newEpic = newTaskManager.addEpicTask(new Epic("Английский", "Сделать домашнее задание"));
+        int newsubTask = newTaskManager.addSubTask(new SubTask("Прослушать аудио", "", TaskState.DONE, newEpic));
+        int newsub = newTaskManager.addSubTask(new SubTask("Сделать упражнение", "-", TaskState.NEW, newEpic));
 
-        newTaskManager.getEpic(newEpicid);
-        newTaskManager.getSubTask(newsubTaskId2);
+        newTaskManager.getEpic(newEpic);
+        newTaskManager.getSubTask(newsub);
         newTaskManager.removeTask(epicId);
-        newTaskManager.removeTask(newsubTaskId1);
+        newTaskManager.removeTask(newsubTask);
 
         TaskManager newTaskManager2 = Managers.loadTaskManagerFromServer(Managers.getDefaultUrl());
         myAssert(newTaskManager2.getHistory().toString().equals(newTaskManager.getHistory().toString()));

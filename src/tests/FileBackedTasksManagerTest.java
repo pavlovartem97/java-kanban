@@ -1,14 +1,12 @@
 package tests;
 
 import manager.FileBackedTasksManager;
-import manager.InMemoryTaskManager;
 import manager.TaskManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.SubTask;
 
-import java.io.File;
 import java.util.List;
 
 public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
@@ -61,7 +59,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     }
 
     @Test
-    public void prioritizedTasksTest(){
+    public void prioritizedTasksTest() {
         TaskManager newTaskManager = FileBackedTasksManager.loadFromFile(fileName);
         Assertions.assertEquals(newTaskManager.getPrioritizedTasks(), taskManager.getPrioritizedTasks());
     }

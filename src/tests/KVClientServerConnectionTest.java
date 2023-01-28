@@ -1,7 +1,10 @@
 package tests;
 
 import manager.Managers;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import server.KVClient;
 import server.KVServer;
 
@@ -13,13 +16,13 @@ public class KVClientServerConnectionTest {
     private KVServer kvServer;
 
     @BeforeEach
-    public void beforeEach() throws IOException, InterruptedException {
+    public void beforeEach() throws IOException {
         kvServer = new KVServer();
         kvServer.start();
     }
 
     @AfterEach
-    public void afterEach(){
+    public void afterEach() {
         kvServer.stop();
     }
 

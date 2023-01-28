@@ -42,11 +42,10 @@ public class KVServer {
                     h.sendResponseHeaders(400, 0);
                     return;
                 }
-                if (data.containsKey(key)){
+                if (data.containsKey(key)) {
                     sendText(h, data.get(key));
                     System.out.println("Значение для ключа " + key + " успешно отправлено!");
-                }
-                else{
+                } else {
                     System.out.println("Key " + key + " не найден на сервере");
                     h.sendResponseHeaders(400, 0);
                 }
